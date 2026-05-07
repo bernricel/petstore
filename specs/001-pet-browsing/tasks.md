@@ -227,3 +227,4 @@ Task: "Build the gallery and detail pages in frontend/src/features/"
 - All tasks follow the required checkbox, ID, label, and file-path format
 - `T005` is an explicit blocker that must be complete before any implementation task from `T006` onward
 - The final canonical values are `/api/musngi/catalog` for the API base path and `com.musngi.petbrowsing` for the Java package root
+- Post-implementation backend stabilization for `T021-T028` included local datasource alignment, CORS support for the local frontend, and a lazy-loading fix for gallery/category read mapping in `backend/src/main/java/com/musngi/petbrowsing/`
