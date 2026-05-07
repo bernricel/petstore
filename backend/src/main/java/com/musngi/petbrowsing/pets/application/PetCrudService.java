@@ -42,6 +42,7 @@ public class PetCrudService {
         return petMapper.toDetail(petRepository.save(pet));
     }
 
+    @Transactional
     public PetDetailResponse getPet(UUID petId) {
         return petMapper.toDetail(getExistingPet(petId));
     }
@@ -62,7 +63,7 @@ public class PetCrudService {
     }
 
     private Pet getExistingPet(UUID petId) {
-        return petRepository.findById(petId)
+        return petRepository.findByIdAndPublishedTrue(petId)
                 .orElseThrow(() -> new NotFoundException("Pet '%s' was not found.".formatted(petId)));
     }
 
@@ -96,4 +97,3 @@ public class PetCrudService {
         pet.setPublished(Boolean.TRUE.equals(request.published()));
     }
 }
-

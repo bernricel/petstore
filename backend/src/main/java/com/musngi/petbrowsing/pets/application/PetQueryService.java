@@ -8,6 +8,7 @@ import com.musngi.petbrowsing.pets.domain.PetAvailabilityStatus;
 import com.musngi.petbrowsing.pets.domain.PetRepository;
 import com.musngi.petbrowsing.pets.domain.PetSort;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Sort;
@@ -27,6 +28,7 @@ public class PetQueryService {
         this.categoryService = categoryService;
     }
 
+    @Transactional
     public PetListResponse listPublishedPets(String categorySlug, PetAvailabilityStatus availability, PetSort sort) {
         if (categorySlug != null && !categorySlug.isBlank()) {
             categoryService.requireActiveCategory(categorySlug);
