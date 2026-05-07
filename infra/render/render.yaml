@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: petstore-api
+    env: docker
+    dockerfilePath: ./infra/docker/backend.Dockerfile
+    plan: free
+    rootDir: .
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+  - type: web
+    name: petstore-frontend
+    env: docker
+    dockerfilePath: ./infra/docker/frontend.Dockerfile
+    plan: free
+    rootDir: .

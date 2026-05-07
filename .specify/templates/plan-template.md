@@ -17,21 +17,33 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: [e.g., Java 21, TypeScript 5.x or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [e.g., Spring Boot, React, Tailwind, MUI or NEEDS CLARIFICATION]  
+**Storage**: [if applicable, e.g., PostgreSQL or N/A]  
+**Testing**: [e.g., JUnit, Spring Boot integration tests, Vitest, React Testing Library or NEEDS CLARIFICATION]  
+**Target Platform**: [e.g., Render web service + browser clients or NEEDS CLARIFICATION]  
+**Project Type**: [e.g., web application with separate frontend/backend or NEEDS CLARIFICATION]  
+**Performance Goals**: [domain-specific, e.g., catalog load under 2s p95 or NEEDS CLARIFICATION]  
+**Constraints**: [domain-specific, e.g., Render free-tier limits, mobile responsiveness, accessibility baseline or NEEDS CLARIFICATION]  
+**Scale/Scope**: [domain-specific, e.g., MVP storefront + admin catalog management or NEEDS CLARIFICATION]  
+**API/Contract Impact**: [new endpoints, DTOs, validation rules, or N/A]  
+**Database/Migration Impact**: [schema changes, migration plan, rollback notes, or N/A]  
+**Deployment Fit**: [Render free-tier assumptions, Docker parity notes, or NEEDS CLARIFICATION]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- Confirm the solution preserves explicit `backend/`, `frontend/`, and infrastructure
+  boundaries with no direct frontend dependence on database internals.
+- Identify every API contract, DTO change, and PostgreSQL migration required by the
+  feature, including any breaking-change handling.
+- Define the automated tests required for the story, including backend integration tests
+  and frontend component or flow coverage for critical journeys.
+- Review security, privacy, accessibility, and responsive-design impact for customer and
+  admin experiences.
+- Verify the design fits Render free-tier deployment and local Docker parity without
+  introducing unnecessary paid services or always-on worker processes.
 
 ## Project Structure
 
@@ -56,7 +68,7 @@ specs/[###-feature]/
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
+# [REMOVE IF UNUSED] Option 1: Single project
 src/
 ├── models/
 ├── services/
@@ -68,7 +80,7 @@ tests/
 ├── integration/
 └── unit/
 
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
+# Option 2: Web application (default when frontend + backend are present)
 backend/
 ├── src/
 │   ├── models/
@@ -83,7 +95,11 @@ frontend/
 │   └── services/
 └── tests/
 
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
+infra/
+├── docker/
+└── render/
+
+# [REMOVE IF UNUSED] Option 3: Mobile + API
 api/
 └── [same as backend above]
 

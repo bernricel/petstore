@@ -1,0 +1,305 @@
+openapi: 3.0.3
+info:
+  title: Pet Catalog Management and Gallery API
+  version: 1.0.0
+  description: Public unauthenticated CRUD and gallery API under `/api/musngi/catalog`.
+servers:
+  - url: http://localhost:8080
+    description: Local development
+paths:
+  /api/musngi/catalog/categories:
+    get:
+      summary: List active pet categories
+      operationId: listCategories
+      responses:
+        '200':
+          description: Active categories returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [categories]
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+  /api/musngi/catalog/pets:
+    get:
+      summary: List pets for gallery and API consumers
+      operationId: listPets
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Category slug filter
+        - in: query
+          name: availability
+          schema:
+            type: string
+            enum: [AVAILABLE, PENDING, UNAVAILABLE]
+          description: Optional availability filter
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [FEATURED, PRICE_ASC, PRICE_DESC, NAME_ASC, NEWEST]
+            default: FEATURED
+          description: Gallery sort order
+      responses:
+        '200':
+          description: Pets returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, appliedFilters]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PetSummary'
+                  appliedFilters:
+                    $ref: '#/components/schemas/AppliedFilters'
+        '400':
+          description: Invalid list parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Create a pet
+      operationId: createPet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePetRequest'
+      responses:
+        '201':
+          description: Pet created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDetail'
+        '400':
+          description: Invalid create payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/musngi/catalog/pets/{petId}:
+    get:
+      summary: Retrieve a single pet
+      operationId: getPet
+      parameters:
+        - in: path
+          name: petId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Pet returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDetail'
+        '404':
+          description: Pet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Update a pet
+      operationId: updatePet
+      parameters:
+        - in: path
+          name: petId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePetRequest'
+      responses:
+        '200':
+          description: Pet updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDetail'
+        '400':
+          description: Invalid update payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Pet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete a pet
+      operationId: deletePet
+      parameters:
+        - in: path
+          name: petId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Pet deleted successfully
+        '404':
+          description: Pet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Category:
+      type: object
+      required: [id, slug, displayName]
+      properties:
+        id:
+          type: string
+          format: uuid
+        slug:
+          type: string
+          example: dogs
+        displayName:
+          type: string
+          example: Dogs
+    CreatePetRequest:
+      type: object
+      required:
+        - categorySlug
+        - slug
+        - name
+        - breedOrType
+        - summary
+        - priceAmount
+        - currencyCode
+        - availabilityStatus
+        - published
+      properties:
+        categorySlug:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        breedOrType:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        priceAmount:
+          type: number
+          format: double
+        currencyCode:
+          type: string
+        availabilityStatus:
+          type: string
+          enum: [AVAILABLE, PENDING, UNAVAILABLE]
+        primaryImageUrl:
+          type: string
+          nullable: true
+        galleryImageUrls:
+          type: array
+          items:
+            type: string
+        published:
+          type: boolean
+    UpdatePetRequest:
+      allOf:
+        - $ref: '#/components/schemas/CreatePetRequest'
+    PetSummary:
+      type: object
+      required:
+        - id
+        - slug
+        - name
+        - category
+        - breedOrType
+        - summary
+        - priceAmount
+        - currencyCode
+        - availabilityStatus
+      properties:
+        id:
+          type: string
+          format: uuid
+        slug:
+          type: string
+        name:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category'
+        breedOrType:
+          type: string
+        summary:
+          type: string
+        priceAmount:
+          type: number
+          format: double
+        currencyCode:
+          type: string
+        availabilityStatus:
+          type: string
+          enum: [AVAILABLE, PENDING, UNAVAILABLE]
+        primaryImageUrl:
+          type: string
+          nullable: true
+    PetDetail:
+      allOf:
+        - $ref: '#/components/schemas/PetSummary'
+        - type: object
+          required: [description, galleryImageUrls, published, lastUpdatedAt]
+          properties:
+            description:
+              type: string
+            galleryImageUrls:
+              type: array
+              items:
+                type: string
+            published:
+              type: boolean
+            lastUpdatedAt:
+              type: string
+              format: date-time
+    AppliedFilters:
+      type: object
+      required: [sort]
+      properties:
+        category:
+          type: string
+          nullable: true
+        availability:
+          type: string
+          nullable: true
+        sort:
+          type: string
+          enum: [FEATURED, PRICE_ASC, PRICE_DESC, NAME_ASC, NEWEST]
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string

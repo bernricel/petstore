@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+coverage/
+target/
+.gradle/
+.mvn/wrapper/maven-wrapper.jar
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+.env
+.env.*
+

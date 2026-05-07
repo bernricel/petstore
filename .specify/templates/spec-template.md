@@ -89,16 +89,29 @@
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-006**: System MUST define API contract changes, validation rules, and failure
+  modes for every new or changed backend capability.
+- **FR-007**: System MUST describe any required persistence changes, including new
+  entities, attributes, and migration expectations.
+- **FR-008**: System MUST state security, privacy, accessibility, and responsive
+  behavior expectations for the affected user journey.
 
 *Example of marking unclear requirements:*
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-009**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-010**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
 ### Key Entities *(include if feature involves data)*
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
+
+## Contracts and Data Impact
+
+- **API Surface**: [List affected endpoints, events, or client/server contracts]
+- **Validation Rules**: [Summarize important request, business, and error constraints]
+- **Persistence Changes**: [Tables, fields, relationships, indexes, or N/A]
+- **Migration Notes**: [Backfill, rollback, compatibility expectations, or N/A]
 
 ## Success Criteria *(mandatory)*
 
@@ -126,3 +139,4 @@
 - [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
 - [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
 - [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]
+- [Assumption about deployment limits, e.g., "Feature must run within Render free-tier service constraints"]
