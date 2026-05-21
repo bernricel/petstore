@@ -2,7 +2,7 @@ spring:
   application:
     name: petbrowsing
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/petstore}
+    url: jdbc:postgresql://${SPRING_DATASOURCE_HOST:localhost}:${SPRING_DATASOURCE_PORT:5432}/${SPRING_DATASOURCE_DATABASE:petstore}
     username: ${SPRING_DATASOURCE_USERNAME:petstore}
     password: ${SPRING_DATASOURCE_PASSWORD:petstore}
     driver-class-name: org.postgresql.Driver
