@@ -1,4 +1,16 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080/api/musngi/catalog";
+function resolveApiBaseUrl() {
+  const configuredUrl = import.meta.env.VITE_API_BASE_URL;
+
+  if (!configuredUrl) {
+    return "http://localhost:8080/api/musngi/catalog";
+  }
+
+  return configuredUrl.endsWith("/api/musngi/catalog")
+    ? configuredUrl
+    : `${configuredUrl.replace(/\/$/, "")}/api/musngi/catalog`;
+}
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {

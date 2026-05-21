@@ -14,6 +14,26 @@ React gallery UI, Docker-based local development, and Render deployment assets.
 See [specs/001-pet-browsing/quickstart.md](specs/001-pet-browsing/quickstart.md) for the
 full setup and validation flow.
 
+## Render Deployment
+
+This repo includes a Render Blueprint at [infra/render/render.yaml](infra/render/render.yaml).
+
+1. Push this repository to GitHub.
+2. In Render, create a new Blueprint and point it at `infra/render/render.yaml`.
+3. Render will create:
+   - `petstore-db` as a managed PostgreSQL database
+   - `petstore-api` as a Docker-based Spring Boot web service
+   - `petstore-frontend` as a static site
+4. Wait for the database to provision, then deploy the backend and frontend.
+5. Open the static site URL and confirm the gallery loads and detail pages work.
+
+Deployment wiring is automatic through the Blueprint:
+
+- The backend reads its PostgreSQL connection string from the managed Render database.
+- The frontend reads the backend public URL from the `petstore-api` service.
+- The backend allows CORS requests from the `petstore-frontend` public URL.
+- The static site rewrites all routes to `index.html` so React Router paths work.
+
 ## Common Commands
 
 - Start PostgreSQL: `docker compose -f infra/docker/docker-compose.yml up -d postgres`
